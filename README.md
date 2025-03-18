@@ -1,4 +1,4 @@
-# SimplerCart - Front-End Take Home Test
+# SimplerCart - Front-End
 
 A shopping cart application built with React 19, TypeScript, Redux Toolkit, and Tailwind CSS.
 
@@ -50,13 +50,7 @@ npm install
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
-
-### API Configuration
-
-The application is configured to connect to a REST API provided by the Docker image at `registry.gitlab.com/saysimpler/hiring/fe-sample-api`. Make sure the API is running and accessible.
-
-You can update the API URL in `src/services/api.ts` if needed.
+4. Open your browser and navigate to `http://localhost:3000`
 
 ### Running Tests
 
@@ -113,14 +107,3 @@ src/
    - Submit order to API
    - Success confirmation
    - Error handling
-
-4. **Responsive Design**
-   - Mobile-first approach
-   - Adapts to different screen sizes
-
-## Implementation Notes
-
-- Used Banker's rounding for floating point arithmetic operations
-- Implemented proper error handling throughout the application
-- Added comprehensive test coverage
-- Used TypeScript for type safety
