@@ -1,0 +1,22 @@
+/* Cart Flyout Animation */
+.cart-flyout-enter {
+  opacity: 0;
+  transform: translateY(1rem);
+}
+
+.cart-flyout-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.cart-flyout-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cart-flyout-exit-active {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 150ms ease-in, transform 150ms ease-in;
+}
