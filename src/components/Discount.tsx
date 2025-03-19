@@ -43,7 +43,11 @@ const Discount = () => {
             {discount.code} (
             {discount.type === 'PERCENTAGE' ? `${discount.amount}%` : `$${discount.amount}`})
           </span>
-          <button onClick={handleClearDiscount} className="text-sm text-red-500 hover:text-red-700">
+          <button
+            data-testid="remove-discount"
+            onClick={handleClearDiscount}
+            className="text-sm text-red-500 hover:text-red-700"
+          >
             Remove
           </button>
         </div>
