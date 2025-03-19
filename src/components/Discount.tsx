@@ -22,7 +22,7 @@ const Discount = () => {
 
     const validDiscount = discounts.find((d: Discount) => d.code === discountCode);
 
-    if (validDiscount) {
+    if (validDiscount && validDiscount.amount) {
       dispatch(applyDiscount(validDiscount));
       setDiscountCode('');
     } else {
