@@ -25,7 +25,6 @@ describe('cartSlice', () => {
     id: '1',
     name: 'Test Product',
     price: 19.99,
-    image: 'test.jpg',
     stock: 10,
   };
 

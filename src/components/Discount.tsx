@@ -58,6 +58,7 @@ const Discount = () => {
             className="border rounded-l px-3 py-2 w-full"
           />
           <button
+            data-testid="apply-button"
             onClick={handleApplyDiscount}
             disabled={isLoading}
             className="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-r disabled:opacity-50"

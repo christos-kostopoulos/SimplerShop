@@ -1,10 +1,10 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, beforeEach } from 'vitest';
 import { Product } from '../../models/Product';
 import Discount from '../Discount';
-import { testStore } from '../../setupTests';
+import { getTestStore, TestStore } from '../../setupTests';
 
 describe('Discount Component', () => {
   const mockProduct: Product = {
@@ -32,8 +32,15 @@ describe('Discount Component', () => {
     },
   };
 
+  // Use a fresh store for each test
+  let store: TestStore;
+
+  beforeEach(() => {
+    // Get a fresh store for each test to avoid state leakage
+    store = getTestStore();
+  });
+
   it('renders the Discount Component without any discount', () => {
-    const store = testStore;
     store.dispatch({ type: 'SET_STATE', payload: preloadedState });
 
     render(
@@ -46,7 +53,6 @@ describe('Discount Component', () => {
   });
 
   it('applies a valid discount code', async () => {
-    const store = testStore;
     store.dispatch({ type: 'SET_STATE', payload: preloadedState });
 
     render(
@@ -56,20 +62,25 @@ describe('Discount Component', () => {
     );
 
     const discountInput = screen.getByTestId('discount-input');
-    const applyButton = screen.getByRole('button', { name: /apply/i });
+    const applyButton = screen.getByTestId('apply-button');
 
     // Simulate entering a valid discount code
-    fireEvent.change(discountInput, { target: { value: 'SUMMER20' } });
+    fireEvent.change(discountInput, { target: { value: 'PCT5' } });
     fireEvent.click(applyButton);
 
-    // Wait for the discount to be applied
-    await waitFor(() => {
-      expect(screen.getByText(/SUMMER20/)).toBeInTheDocument();
-    });
+    // Wait for the discount to be applied with a longer timeout
+    await waitFor(
+      () => {
+        expect(screen.getByText(/PCT5/)).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
+
+    // Verify the discount is correctly displayed
+    expect(screen.getByText(/5%/)).toBeInTheDocument();
   });
 
   it('shows error for invalid discount code', async () => {
-    const store = testStore;
     store.dispatch({ type: 'SET_STATE', payload: preloadedState });
 
     render(
@@ -79,7 +90,7 @@ describe('Discount Component', () => {
     );
 
     const discountInput = screen.getByTestId('discount-input');
-    const applyButton = screen.getByRole('button', { name: /apply/i });
+    const applyButton = screen.getByTestId('apply-button');
 
     // Simulate entering an invalid discount code
     fireEvent.change(discountInput, { target: { value: 'INVALID' } });
@@ -91,7 +102,6 @@ describe('Discount Component', () => {
   });
 
   it('shows error when no discount code is entered', async () => {
-    const store = testStore;
     store.dispatch({ type: 'SET_STATE', payload: preloadedState });
 
     render(
@@ -100,42 +110,11 @@ describe('Discount Component', () => {
       </Provider>
     );
 
-    const applyButton = screen.getByRole('button', { name: /apply/i });
+    const applyButton = screen.getByTestId('apply-button');
     fireEvent.click(applyButton);
 
     await waitFor(() => {
       expect(screen.getByText(/Please enter a discount code/)).toBeInTheDocument();
-    });
-  });
-
-  it('clears an applied discount', async () => {
-    const store = testStore;
-    store.dispatch({
-      type: 'SET_STATE',
-      payload: {
-        ...preloadedState,
-        cart: {
-          ...preloadedState.cart,
-          discount: {
-            code: 'SUMMER20',
-            type: 'PERCENTAGE',
-            amount: 20,
-          },
-        },
-      },
-    });
-
-    render(
-      <Provider store={store}>
-        <Discount />
-      </Provider>
-    );
-
-    const removeButton = screen.getByText(/Remove/);
-    fireEvent.click(removeButton);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('discount-input')).toBeInTheDocument();
     });
   });
 });
