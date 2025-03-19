@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { clearCart, submitOrder } from '../../store/slices/cartSlice';
+import { submitOrder } from '../../store/slices/cartSlice';
 import CartItemsList from './CartItemsList';
 import Discount from '../Discount';
 import OrderDetails from '../OrderDetails';
+import ErrorBoundary from '../ErrorBoundary';
 
 const Cart = () => {
   const dispatch = useAppDispatch();
-  const { items, discount, cartId } = useAppSelector((state) => state.cart);
+  const { items } = useAppSelector((state) => state.cart);
 
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
@@ -59,7 +60,19 @@ const Cart = () => {
           </div>
           <div className="mt-8 border-t border-gray-200 pt-6">
             <Discount />
-            <OrderDetails />
+            <ErrorBoundary
+              fallback={
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">
+                  <strong className="font-bold">Error in Order Details!</strong>
+                  <span className="block sm:inline">
+                    {' '}
+                    Please try refreshing the page or contact support.
+                  </span>
+                </div>
+              }
+            >
+              <OrderDetails />
+            </ErrorBoundary>
             <button
               onClick={handleCheckout}
               disabled={isCheckingOut || items.length === 0}

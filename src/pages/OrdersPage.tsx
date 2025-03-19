@@ -1,5 +1,6 @@
 import { useAppSelector } from '../store/hooks';
-import { useGetOrderQuery } from '../services/ordersApi';
+import OrderCard from '../components/OrderCart';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const OrdersPage = () => {
   const orderIds = useAppSelector((state) => state.orders.orderIds);
@@ -15,7 +16,16 @@ const OrdersPage = () => {
       ) : (
         <div className="space-y-6">
           {orderIds.map((orderId) => (
-            <OrderCard key={orderId} orderId={orderId} />
+            <ErrorBoundary
+              key={orderId}
+              fallback={
+                <div className="border rounded-lg p-4 shadow-sm bg-red-50">
+                  <p className="text-red-600">Error loading order #{orderId.substring(0, 8)}...</p>
+                </div>
+              }
+            >
+              <OrderCard orderId={orderId} />
+            </ErrorBoundary>
           ))}
         </div>
       )}

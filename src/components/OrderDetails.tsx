@@ -8,7 +8,12 @@ const OrderDetails = () => {
 
   // // Calculate subtotal
   const subtotal = items.reduce((total, item) => {
-    return total + products[item.productId].price * item.quantity;
+    const product = products[item.productId];
+    if (!product) {
+      // If product doesn't exist, throw a more descriptive error that will be caught by ErrorBoundary
+      throw new Error(`Product with ID ${item.productId} not found in order details`);
+    }
+    return total + product.price * item.quantity;
   }, 0);
 
   // // Calculate discount amount
