@@ -16,7 +16,7 @@ describe('Discount Component', () => {
 
   const preloadedState = {
     products: {
-      ids: ['1'],
+      ids: ['testtt-adsdtest'],
       entities: {
         '1': mockProduct,
       },
